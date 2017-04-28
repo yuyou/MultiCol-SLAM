@@ -21,7 +21,7 @@
 /*
 * MultiCol-SLAM is based on ORB-SLAM2 which was also released under GPLv3
 * For more information see <https://github.com/raulmur/ORB_SLAM2>
-* Raúl Mur-Artal <raulmur at unizar dot es> (University of Zaragoza)
+* Raï¿½l Mur-Artal <raulmur at unizar dot es> (University of Zaragoza)
 */
 
 #ifndef MULTIFRAMEPUBLISHER_H
@@ -62,7 +62,7 @@ namespace MultiColSLAM
 		std::vector<cv::KeyPoint> mvCurrentKeys;
 
 		std::vector<bool> mvbOutliers;
-		std::unordered_map<size_t, int> keyp_to_cam;
+		std::tr1::unordered_map<size_t, int> keyp_to_cam;
 		std::vector<cMapPoint*> mvpMatchedMapPoints;
 		int mnTracked;
 		std::vector<cv::KeyPoint> mvIniKeys;

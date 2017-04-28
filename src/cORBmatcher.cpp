@@ -21,7 +21,7 @@
 /*
 * MultiCol-SLAM is based on ORB-SLAM2 which was also released under GPLv3
 * For more information see <https://github.com/raulmur/ORB_SLAM2>
-* Raúl Mur-Artal <raulmur at unizar dot es> (University of Zaragoza)
+* Raï¿½l Mur-Artal <raulmur at unizar dot es> (University of Zaragoza)
 */
 
 #include "cORBmatcher.h"
@@ -43,11 +43,11 @@ using namespace std;
 
 const int cORBmatcher::HISTO_LENGTH = 30;
 
-cORBmatcher::cORBmatcher(double nnratio, 
-	bool checkOri, const int featDim, bool havingMasks_) : 
-mfNNratio(nnratio), 
-mbCheckOrientation(checkOri), 
-mbFeatDim(featDim), 
+cORBmatcher::cORBmatcher(double nnratio,
+	bool checkOri, const int featDim, bool havingMasks_) :
+mfNNratio(nnratio),
+mbCheckOrientation(checkOri),
+mbFeatDim(featDim),
 havingMasks(havingMasks_)
 {
 	// change thresholds if we are using masks, as the hamming distance distribution
@@ -65,7 +65,7 @@ havingMasks(havingMasks_)
 }
 
 int cORBmatcher::SearchByProjection(cMultiFrame &F,
-	const vector<cMapPoint*> &vpMapPoints, 
+	const vector<cMapPoint*> &vpMapPoints,
 	const double th)
 {
     int nmatches=0;
@@ -123,13 +123,13 @@ int cORBmatcher::SearchByProjection(cMultiFrame &F,
 
 				int descIdx = F.cont_idx_to_local_cam_idx.find(idx)->second;
 				const uint64_t* d1 = F.mDescriptors[cam].ptr<uint64_t>(descIdx);
-				
+
 				int dist = 0;
 				// masked distance
 				if (havingMasks)
 				{
 					const uint64_t* d1_mask = F.mDescriptorMasks[cam].ptr<uint64_t>(descIdx);
-					dist = DescriptorDistance64Masked(ptrMPdesc, d1, 
+					dist = DescriptorDistance64Masked(ptrMPdesc, d1,
 						ptrMPdesc_mask, d1_mask, mbFeatDim);
 				}
 				else
@@ -176,7 +176,7 @@ double cORBmatcher::RadiusByViewingCos(const double &viewCos)
 
 
 
-int cORBmatcher::SearchByBoW(cMultiKeyFrame* pKF, 
+int cORBmatcher::SearchByBoW(cMultiKeyFrame* pKF,
 	cMultiFrame &F,
 	vector<cMapPoint*> &vpMapPointMatches)
 {
@@ -243,7 +243,7 @@ int cORBmatcher::SearchByBoW(cMultiKeyFrame* pKF,
 					if (havingMasks)
 					{
 						const uint64_t* dF_mask = F.mDescriptorMasks[camIdx2].ptr<uint64_t>(descIdx2);
-						dist = DescriptorDistance64Masked(dKF, dF, 
+						dist = DescriptorDistance64Masked(dKF, dF,
 							dKF_mask, dF_mask, mbFeatDim);
 					}
 					else
@@ -324,9 +324,9 @@ int cORBmatcher::SearchByBoW(cMultiKeyFrame* pKF,
 
 
 int cORBmatcher::WindowSearch(cMultiFrame &F1, cMultiFrame &F2,
-	int windowSize, 
-	vector<cMapPoint *> &vpMapPointMatches2, 
-	int minScaleLevel, 
+	int windowSize,
+	vector<cMapPoint *> &vpMapPointMatches2,
+	int minScaleLevel,
 	int maxScaleLevel)
 {
     int nmatches=0;
@@ -363,8 +363,8 @@ int cORBmatcher::WindowSearch(cMultiFrame &F1, cMultiFrame &F2,
                 continue;
 
 		int camIdx1 = F1.keypoint_to_cam.find(i1)->second;
-        vector<size_t> vIndices2 = 
-			F2.GetFeaturesInArea(camIdx1, kp1.pt.x, kp1.pt.y, 
+        vector<size_t> vIndices2 =
+			F2.GetFeaturesInArea(camIdx1, kp1.pt.x, kp1.pt.y,
 			windowSize);
 
         if (vIndices2.empty())
@@ -380,7 +380,7 @@ int cORBmatcher::WindowSearch(cMultiFrame &F1, cMultiFrame &F2,
         int bestDist2 = INT_MAX;
         int bestIdx2 = -1;
 		int camIdx2 = 0;
-		for (vector<size_t>::iterator vit = vIndices2.begin(), vend = vIndices2.end(); 
+		for (vector<size_t>::iterator vit = vIndices2.begin(), vend = vIndices2.end();
 			vit != vend; ++vit)
         {
             size_t i2 = *vit;
@@ -401,7 +401,7 @@ int cORBmatcher::WindowSearch(cMultiFrame &F1, cMultiFrame &F2,
 			else
 				dist = DescriptorDistance64(d1, d2, mbFeatDim);
             //int dist = DescriptorDistance(d1,d2);
-			
+
             if (dist < bestDist)
             {
                 bestDist2 = bestDist;
@@ -473,9 +473,9 @@ int cORBmatcher::WindowSearch(cMultiFrame &F1, cMultiFrame &F2,
 }
 
 
-int cORBmatcher::SearchByProjection(cMultiFrame &F1, 
+int cORBmatcher::SearchByProjection(cMultiFrame &F1,
 	cMultiFrame &F2,
-	int windowSize, 
+	int windowSize,
 	vector<cMapPoint *> &vpMapPointMatches2)
 {
     vpMapPointMatches2 = F2.mvpMapPoints;
@@ -484,7 +484,7 @@ int cORBmatcher::SearchByProjection(cMultiFrame &F1,
 
     int nmatches = 0;
 
-	std::unordered_map<cMapPoint*, int> mapPt_2_obs_idx;
+	std::tr1::unordered_map<cMapPoint*, int> mapPt_2_obs_idx;
 	for (size_t i1 = 0, iend1 = F1.mvpMapPoints.size(); i1 < iend1; ++i1)
     {
         cMapPoint* pMP1 = F1.mvpMapPoints[i1];
@@ -518,7 +518,7 @@ int cORBmatcher::SearchByProjection(cMultiFrame &F1,
 				//	windowSize);
 				if (vIndices2.empty())
 					continue;
-				
+
 				int descIdx = F1.cont_idx_to_local_cam_idx.find(i1)->second;
 				const uint64_t* d1 = F1.mDescriptors[camIdxFeat].ptr<uint64_t>(descIdx);
 				const uint64_t* d1_mask = 0;
@@ -576,10 +576,10 @@ int cORBmatcher::SearchByProjection(cMultiFrame &F1,
     return nmatches;
 }
 
-int cORBmatcher::SearchForInitialization(cMultiFrame &F1, 
+int cORBmatcher::SearchForInitialization(cMultiFrame &F1,
 	cMultiFrame &F2,
-	vector<cv::Vec2d> &vbPrevMatched, 
-	vector<int> &vnMatches12, 
+	vector<cv::Vec2d> &vbPrevMatched,
+	vector<int> &vnMatches12,
 	int windowSize)
 {
 	HResClk::time_point begin = HResClk::now();
@@ -604,9 +604,9 @@ int cORBmatcher::SearchForInitialization(cMultiFrame &F1,
         //    continue;
 
 		int camIdx1 = F1.keypoint_to_cam.find(i1)->second;
-		
-        vector<size_t> vIndices2 = 
-			F2.GetFeaturesInArea(camIdx1, vbPrevMatched[i1](0), 
+
+        vector<size_t> vIndices2 =
+			F2.GetFeaturesInArea(camIdx1, vbPrevMatched[i1](0),
 								 vbPrevMatched[i1](1),
 								 windowSize,level1,level1);
 		//cout << "vIndices2: " << vIndices2.size() << endl;
@@ -717,7 +717,7 @@ int cORBmatcher::SearchForInitialization(cMultiFrame &F1,
     //Update prev matched
 	for (size_t i1 = 0, iend1 = vnMatches12.size(); i1 < iend1; ++i1)
         if (vnMatches12[i1] >= 0)
-			vbPrevMatched[i1] = 
+			vbPrevMatched[i1] =
 				cv::Vec2d(F2.mvKeys[vnMatches12[i1]].pt.x, F2.mvKeys[vnMatches12[i1]].pt.y);
 
 	HResClk::time_point end = HResClk::now();
@@ -725,8 +725,8 @@ int cORBmatcher::SearchForInitialization(cMultiFrame &F1,
     return nmatches;
 }
 
-//int cORBmatcher::SearchByBoW(cMultiKeyFrame *pKF1, 
-//	cMultiKeyFrame *pKF2, 
+//int cORBmatcher::SearchByBoW(cMultiKeyFrame *pKF1,
+//	cMultiKeyFrame *pKF2,
 //	vector<cMapPoint *> &vpMatches12)
 //{
 //    vector<cv::KeyPoint> vKeys1 = pKF1->GetKeyPoints();
@@ -775,7 +775,7 @@ int cORBmatcher::SearchForInitialization(cMultiFrame &F1,
 //
 //				int camIdx1 = pKF1->keypoint_to_cam.find(i1)->second;
 //				int descIdx1 = pKF1->cont_idx_to_local_cam_idx.find(i1)->second;
-//				
+//
 //				const uint64_t* d1 = Descriptors1[camIdx1].ptr<uint64_t>(descIdx1);
 //				const uint64_t* d1_mask = 0;
 //				if (havingMasks)
@@ -822,7 +822,7 @@ int cORBmatcher::SearchForInitialization(cMultiFrame &F1,
 //
 //                if (bestDist1 < TH_LOW_)
 //                {
-//					if (static_cast<double>(bestDist1) < 
+//					if (static_cast<double>(bestDist1) <
 //						mfNNratio*static_cast<double>(bestDist2))
 //                    {
 //                        vpMatches12[idx1] = vpMapPoints2[bestIdx2];
@@ -920,9 +920,9 @@ int cORBmatcher::SearchByBoW(cMultiKeyFrame *pKF1,
 		for (size_t idx2 = 0; idx2 < vpMapPoints2.size(); ++idx2)
 		{
 			cMapPoint* pMP2 = vpMapPoints2[idx2];
-			
+
 			if (vbMatched2[idx2] || !pMP2)
-			    continue;	
+			    continue;
 			if (pMP2->isBad())
 			    continue;
 
@@ -1052,7 +1052,7 @@ int cORBmatcher::SearchForTriangulationRaw(cMultiKeyFrame *pKF1,
 
 			int dist = 0;
 			if (havingMasks)
-			{ 
+			{
 				const uint64_t* d2_mask = pKF2->GetDescriptorMaskRowPtr(camIdx2, descIdx2);
 				dist = DescriptorDistance64Masked(d1, d2, d1_mask, d2_mask, mbFeatDim);
 			}
@@ -1233,7 +1233,7 @@ int cORBmatcher::SearchForTriangulationBetweenCameras(cMultiKeyFrame *pKF1,
 				const uint64_t* d_mask = pKF1->GetDescriptorMaskRowPtr(cam2, idxDescCurr);
 				dist = DescriptorDistance64Masked(descMP, d, descMP_mask, d_mask, mbFeatDim);
 			}
-			else 
+			else
 				dist = DescriptorDistance64(descMP, d,mbFeatDim);
 
 			if (dist < bestDist)
@@ -1264,7 +1264,7 @@ int cORBmatcher::SearchForTriangulationBetweenCameras(cMultiKeyFrame *pKF1,
 
 int cORBmatcher::Fuse(cMultiKeyFrame *pKF,
 	cMultiKeyFrame *curKF,
-	vector<cMapPoint *> &vpMapPoints, 
+	vector<cMapPoint *> &vpMapPoints,
 	double th)
 {
 	cMultiCamSys_& camSys = pKF->camSystem;
@@ -1293,7 +1293,7 @@ int cORBmatcher::Fuse(cMultiKeyFrame *pKF,
 		for (int cam = 0; cam < camSys.GetNrCams(); ++cam)
 		{
 			cv::Vec2d uv(0.0, 0.0);
-			
+
 			camSys.WorldToCamHom_fast(cam, pt4, uv);
 
 			// Point must be inside the image
@@ -1357,7 +1357,7 @@ int cORBmatcher::Fuse(cMultiKeyFrame *pKF,
 					const uint64_t* dKF_mask = pKF->GetDescriptorMaskRowPtr(cam, descIdx);
 					dist = DescriptorDistance64Masked(dMP, dKF, dMP_mask, dKF_mask, mbFeatDim);
 				}
-				else 
+				else
 					dist = DescriptorDistance64(dMP, dKF, mbFeatDim);
 
 				if (dist < bestDist)
@@ -1383,8 +1383,8 @@ int cORBmatcher::Fuse(cMultiKeyFrame *pKF,
 			for (int f = 0; f < bestIdxs.size(); ++f)
 			{
 				pMPinKF = pKF->GetMapPoint(bestIdxs[f]);
-				// if there is a map point assigned to this postion 
-				// fuse it 
+				// if there is a map point assigned to this postion
+				// fuse it
 				if (pMPinKF)
 				{
 					cv::Vec3d ray1 = curKF->GetKeyPointRay(i);
@@ -1411,7 +1411,7 @@ int cORBmatcher::Fuse(cMultiKeyFrame *pKF,
 				}
 			}
 
-			
+
 		}
 	}
     return nFused;
@@ -1503,7 +1503,7 @@ int cORBmatcher::Fuse(cMultiKeyFrame* pKF,
 
 				int descIdx = pKF->cont_idx_to_local_cam_idx.find(idx)->second;
 
-				const uint64_t* dKF = pKF->GetDescriptorRowPtr(cam, descIdx);			
+				const uint64_t* dKF = pKF->GetDescriptorRowPtr(cam, descIdx);
 				int dist = 0;
 				if (havingMasks)
 				{
@@ -1519,7 +1519,7 @@ int cORBmatcher::Fuse(cMultiKeyFrame* pKF,
 					bestIdx = idx;
 				}
 			}
-			
+
 			if (bestIdx < 0)
 				continue;
 			// make it stronger, also the epipolar constrain has to hold
@@ -1539,10 +1539,10 @@ int cORBmatcher::Fuse(cMultiKeyFrame* pKF,
 			// add more than one observation
 			for (int f = 0; f < bestIdxs.size(); ++f)
 			{
-				
+
 				pMPinKF = pKF->GetMapPoint(bestIdxs[f]);
-				// if there is a map point assigned to this postion 
-				// fuse it 
+				// if there is a map point assigned to this postion
+				// fuse it
 				if (pMPinKF)
 				{
 					if (!pMPinKF->isBad())
@@ -1650,7 +1650,7 @@ int cORBmatcher::Fuse(cMultiKeyFrame *pKF, cv::Matx44d Scw,
 			// Match to the most similar keypoint in the radius
 			const uint64_t* dMP = pMP->GetDescriptorPtr();
 			const uint64_t* dMP_mask = 0;
-			if (havingMasks) 
+			if (havingMasks)
 				dMP_mask = pMP->GetDescriptorMaskPtr();
 
 			int bestDist = INT_MAX;
@@ -1673,7 +1673,7 @@ int cORBmatcher::Fuse(cMultiKeyFrame *pKF, cv::Matx44d Scw,
 					const uint64_t* dKF_mask = pKF->GetDescriptorMaskRowPtr(cam, descIdx);
 					dist = DescriptorDistance64Masked(dMP, dKF, dMP_mask, dKF_mask, mbFeatDim);
 				}
-				else 
+				else
 					dist = DescriptorDistance64(dMP, dKF, mbFeatDim);
 
 				if (dist < bestDist)
@@ -1697,7 +1697,7 @@ int cORBmatcher::Fuse(cMultiKeyFrame *pKF, cv::Matx44d Scw,
 			{
 
 				pMPinKF = pKF->GetMapPoint(bestIdxs[f]);
-				// if there is a map point assigned to this position -> fuse it 
+				// if there is a map point assigned to this position -> fuse it
 				if (pMPinKF)
 				{
 					if (!pMPinKF->isBad())
@@ -1721,9 +1721,9 @@ int cORBmatcher::Fuse(cMultiKeyFrame *pKF, cv::Matx44d Scw,
 int cORBmatcher::SearchBySim3(cMultiKeyFrame *pKF1,
 	cMultiKeyFrame *pKF2,
 	vector<cMapPoint*> &vpMatches12,
-    const double &s12, 
-	const cv::Matx33d &R12, 
-	const cv::Vec3d &t12, 
+    const double &s12,
+	const cv::Matx33d &R12,
+	const cv::Vec3d &t12,
 	double th)
 {
 	cv::Matx44d T1 = pKF1->GetPoseInverse();
@@ -1751,9 +1751,9 @@ int cORBmatcher::SearchBySim3(cMultiKeyFrame *pKF1,
     const int nMaxLevel2 = pKF2->GetScaleLevels()-1;
 	vector<double> vfScaleFactors2 = pKF2->GetScaleFactors();
 
-    vector<cMapPoint*> vpMapPoints2 = pKF2->GetMapPointMatches();  
+    vector<cMapPoint*> vpMapPoints2 = pKF2->GetMapPointMatches();
 	// TODO:  need total nr of observations, cause multiple cameras can observe a map point
-    const int N2 = vpMapPoints2.size(); 
+    const int N2 = vpMapPoints2.size();
 
     vector<bool> vbAlreadyMatched1(N1,false);
     vector<bool> vbAlreadyMatched2(N2,false);
@@ -2077,7 +2077,7 @@ int cORBmatcher::SearchByProjection(cMultiFrame &CurrentFrame,
 
 				if (mbCheckOrientation)
 				{
-					float rot = 
+					float rot =
 						LastFrame.mvKeys[i].angle - CurrentFrame.mvKeys[bestIdx2].angle;
 					if (rot < 0.0)
 						rot += 360.0f;
@@ -2119,7 +2119,7 @@ int cORBmatcher::SearchByProjection(cMultiFrame &CurrentFrame,
 
 int cORBmatcher::SearchByProjection(cMultiFrame &CurrentFrame,
 	cMultiKeyFrame *pKF,
-	const set<cMapPoint*> &sAlreadyFound, 
+	const set<cMapPoint*> &sAlreadyFound,
 	double th, int ORBdist)
 {
 	cMultiCamSys_& camSys = CurrentFrame.camSystem;
@@ -2352,7 +2352,7 @@ int cORBmatcher::SearchByProjection(cMultiKeyFrame* pKF,
 		int bestDist = INT_MAX;
 		int bestIdx = -1;
 
-		for (vector<size_t>::iterator vit = vIndices.begin(), 
+		for (vector<size_t>::iterator vit = vIndices.begin(),
 			vend = vIndices.end();vit != vend; ++vit)
 		{
 			size_t idx = *vit;
@@ -2372,7 +2372,7 @@ int cORBmatcher::SearchByProjection(cMultiKeyFrame* pKF,
 				const uint64_t* dKF_mask = pKF->GetDescriptorMaskRowPtr(camIdx, idx);
 				dist = DescriptorDistance64Masked(dMP, dKF, dMP_mask, dKF_mask, mbFeatDim);
 			}
-			else 
+			else
 				dist = DescriptorDistance64(dMP, dKF, mbFeatDim);
 			if (dist < bestDist)
 			{
@@ -2391,7 +2391,7 @@ int cORBmatcher::SearchByProjection(cMultiKeyFrame* pKF,
 	return nmatches;
 }
 
-void cORBmatcher::ComputeThreeMaxima(vector<int>* histo, 
+void cORBmatcher::ComputeThreeMaxima(vector<int>* histo,
 	const int L, int &ind1, int &ind2, int &ind3)
 {
     int max1=0;

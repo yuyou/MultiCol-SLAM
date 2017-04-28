@@ -21,7 +21,7 @@
 /*
 * MultiCol-SLAM is based on ORB-SLAM2 which was also released under GPLv3
 * For more information see <https://github.com/raulmur/ORB_SLAM2>
-* Raúl Mur-Artal <raulmur at unizar dot es> (University of Zaragoza)
+* Raï¿½l Mur-Artal <raulmur at unizar dot es> (University of Zaragoza)
 */
 
 #ifndef ORBMATCHER_H
@@ -147,7 +147,7 @@ namespace MultiColSLAM
 			double th = 2.5);
 		int Fuse(cMultiKeyFrame* curKF,
 			std::vector<cMultiKeyFrame*> neighKFs,
-			std::unordered_map<cMapPoint*, int> &vpMapPoints,
+			std::tr1::unordered_map<cMapPoint*, int> &vpMapPoints,
 			double th = 2.5);
 		int Fuse(cMultiKeyFrame* curKF,
 			std::vector<cMapPoint*> &vpMapPoints,

@@ -21,7 +21,7 @@
 /*
 * MultiCol-SLAM is based on ORB-SLAM2 which was also released under GPLv3
 * For more information see <https://github.com/raulmur/ORB_SLAM2>
-* Raúl Mur-Artal <raulmur at unizar dot es> (University of Zaragoza)
+* Raï¿½l Mur-Artal <raulmur at unizar dot es> (University of Zaragoza)
 */
 
 #include "cSystem.h"
@@ -141,7 +141,7 @@ namespace MultiColSLAM
 				tmp(p - 1) = mcs_calib_data[param];
 			}
 			M_c_s[c] = cayley2hom<double>(tmp);
-
+			cout << M_c_s[c] << endl;
 			// Interior orientation
 			string calib_data = path2calibrations + "/InteriorOrientationFisheye" + to_string(c) + ".yaml";
 			cv::FileStorage fSettings(calib_data, cv::FileStorage::READ);
@@ -180,7 +180,7 @@ namespace MultiColSLAM
 	}
 
 	cv::Matx44d cSystem::TrackMultiColSLAM(
-		const std::vector<cv::Mat>& imgSet, 
+		const std::vector<cv::Mat>& imgSet,
 		const double &timestamp)
 	{
 
