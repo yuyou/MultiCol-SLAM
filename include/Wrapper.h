@@ -25,6 +25,10 @@
 
 // numpy
 //#include "numpy/ndarrayobject.h"
+class CSystemWrapper: public MultiColSLAM::cSystem {
+public:
+		MultiColSLAM::cTracking* getTracker();
+};
 
 class Wrapper
 {
@@ -43,11 +47,13 @@ class Wrapper
 
 		//TODO: make it private?
 		void configure(std::string strConfigFile);
-		void track();
+		//void track(const std::vector<cv::Mat>& imgSet, const double &timestamp);
+		void track(const boost::python::list& imgSet, const double &timestamp);
 		int  getStatus();
 		void reset();
 		void getCurrentFrame();
 		bool getIsInitialized();
+		void saveTrajectory(const string &filename);
 
 	public:
 		std::string msg;

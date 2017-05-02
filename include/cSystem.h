@@ -21,7 +21,7 @@
 /*
 * MultiCol-SLAM is based on ORB-SLAM2 which was also released under GPLv3
 * For more information see <https://github.com/raulmur/ORB_SLAM2>
-* Raúl Mur-Artal <raulmur at unizar dot es> (University of Zaragoza)
+* Raï¿½l Mur-Artal <raulmur at unizar dot es> (University of Zaragoza)
 */
 
 #ifndef SYSTEM_H
@@ -86,7 +86,7 @@ namespace MultiColSLAM
 		// See format details at: http://www.ipf.kit.edu/lafida.php
 		void SaveMKFTrajectoryLAFIDA(const string &filename);
 
-	private:
+	public:
 
 		// ORB vocabulary used for place recognition and feature matching.
 		ORBVocabulary* mpVocabulary;

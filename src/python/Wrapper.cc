@@ -106,7 +106,6 @@ void Wrapper::shutdown()
 		return;
 	}
 	SLAM->Shutdown();
-	exit(1);
 }
 
 bool Wrapper::getIsInitialized()
@@ -125,26 +124,41 @@ bool Wrapper::initialized()
 }
 
 
-void Wrapper::track()
+//void Wrapper::track(const std::vector<cv::Mat>& imgSet, const double &timestamp)
+void Wrapper::track(const boost::python::list& imgSet, const double &timestamp)
 {
 	if (!initialized()) {
 		return;
 	}
 
-	// cv::Matx44d TrackMultiColSLAM(const std::vector<cv::Mat>& imgSet, const double &timestamp);
-	SLAM->TrackMultiColSLAM(im, tframe);
+	std::vector<cv::Mat> imgVector(len(imgSet));
+	for (int i = 0; i < len(imgSet) ; i++){
+		cv::Mat img = boost::python::extract<cv::Mat>(imgSet[i]);
+		imgVector[i] = img;
+		//void track(const boost::python::list& imgSet, const double &timestamp);
+
+	}
+	SLAM->TrackMultiColSLAM(imgVector, timestamp);
 }
 
-/*
+
 int Wrapper::getStatus()
 {
 	if (!initialized()) {
 		return -1;
 	}
-	cout << "status: " << SLAM->GetStatus() << endl;
-	return SLAM->GetStatus();
+	cout << "status: " << SLAM->mpTracker->mState << endl;
+	return SLAM->mpTracker->mState;
 }
-*/
+
+void Wrapper::saveTrajectory(const string &filename){
+	if (!isInitialized) {
+		cerr << "System is not initialized " << endl;
+		return;
+	}
+	// Must call Shutdown first
+	SLAM->SaveMKFTrajectoryLAFIDA(filename);
+}
 /*
 void Wrapper::getCurrentFrame()
 {
@@ -167,14 +181,15 @@ void Wrapper::reset()
 BOOST_PYTHON_MODULE(MSLAM)
 {
 	using namespace python;
-	class_<Wrapper>("Wrapper", init<std::string, std::string, std::string>()) // constructor for Wrapper class
-		//.add_property("status", &Wrapper::getStatus) // read-only
+	class_<Wrapper>("MultiColSLAM", init<std::string, std::string, std::string>()) // constructor for Wrapper class
+		.add_property("status", &Wrapper::getStatus) // read-only
 		//.add_property("currentFrame", &Wrapper::getCurrentFrame) // read-only
 		.add_property("isInitialized", &Wrapper::getIsInitialized) // read-only
 		.def("hom2cayley", &Wrapper::hom2cayley)
 		.def("shutdown", &Wrapper::shutdown)
 		.def("track", &Wrapper::track)
 		.def("reset", &Wrapper::reset)
+		.def("saveTrajectory", &Wrapper::saveTrajectory)
 		.def("initialize", &Wrapper::initialize)
 	;
 }
