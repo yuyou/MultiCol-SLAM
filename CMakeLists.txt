@@ -247,8 +247,8 @@ target_link_libraries(MSLAM ${PROJECT_NAME} ${Boost_LIBRARIES} ${PYTHON_LIBRARIE
 # don't prepend wrapper library name with lib
 set_target_properties(MSLAM PROPERTIES PREFIX "" )
 
-#install (TARGETS bin_vocabulary DESTINATION bin)
-
+execute_process ( COMMAND python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()" OUTPUT_VARIABLE PYTHON_SITE_PACKAGES OUTPUT_STRIP_TRAILING_WHITESPACE)
+MESSAGE("INSTALL MSLAM PYTHON LIB to ${PYTHON_SITE_PACKAGES}")
 
 install(TARGETS ${PROJECT_NAME}
     ARCHIVE  DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -262,3 +262,4 @@ install(DIRECTORY Thirdparty/OpenGV/include/opengv DESTINATION ${CMAKE_INSTALL_I
 install(DIRECTORY Thirdparty/g2o/g2o DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 install(FILES Thirdparty/g2o/config.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 install(DIRECTORY Thirdparty/Eigen/Eigen DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/eigen3)
+install(FILES lib/MSLAM.so DESTINATION ${PYTHON_SITE_PACKAGES})
