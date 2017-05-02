@@ -29,13 +29,13 @@ set(INSTALL_LIB_DIR lib CACHE PATH "Installation directory for libraries")
 set(INSTALL_BIN_DIR bin CACHE PATH "Installation directory for executables")
 set(INSTALL_INCLUDE_DIR include CACHE PATH
   "Installation directory for header files")
-if(WIN32 AND NOT CYGWIN)
-  set(DEF_INSTALL_CMAKE_DIR CMake)
-else()
-  set(DEF_INSTALL_CMAKE_DIR lib/CMake/${PROJECT_NAME})
-endif()
-set(INSTALL_CMAKE_DIR ${DEF_INSTALL_CMAKE_DIR} CACHE PATH
-  "Installation directory for CMake files")
+#if(WIN32 AND NOT CYGWIN)
+#  set(DEF_INSTALL_CMAKE_DIR CMake)
+#else()
+#  set(DEF_INSTALL_CMAKE_DIR lib/CMake/${PROJECT_NAME})
+#endif()
+#set(INSTALL_CMAKE_DIR ${DEF_INSTALL_CMAKE_DIR} CACHE PATH
+#  "Installation directory for CMake files")
 
 
 IF(NOT CMAKE_BUILD_TYPE)
@@ -231,6 +231,7 @@ ${OPENGVLIBS}
 ${RANDOMGENLIBS})
 ENDIF()
 
+add_subdirectory(nokia)
 
 # Build examples
 MESSAGE("${PROJECT_NAME}")
@@ -238,18 +239,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Examples/Lafida)
 add_executable(multi_col_slam_lafida Examples/Lafida/mult_col_slam_lafida.cpp)
 target_link_libraries(multi_col_slam_lafida ${PROJECT_NAME})
 
-# build ozo example
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Examples/ozo)
-add_executable(ozo Examples/ozo/ozo.cpp)
-target_link_libraries(ozo ${PROJECT_NAME})
-
-# Build convert
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Examples/ozo)
-add_executable(convert Examples/ozo/convert.cc)
-target_link_libraries(convert ${PROJECT_NAME})
 
 # Build Python wrapper
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Examples/ozo)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
 add_library(MSLAM SHARED src/python/Wrapper.cc)
 target_link_libraries(MSLAM ${PROJECT_NAME} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
@@ -258,14 +249,6 @@ set_target_properties(MSLAM PROPERTIES PREFIX "" )
 
 #install (TARGETS bin_vocabulary DESTINATION bin)
 
-message("BIN DIR: ${INSTALL_CMAKE_DIR}")
-# Install the FooBarConfig.cmake and FooBarConfigVersion.cmake
-# see https://cmake.org/Wiki/CMake/Tutorials/How_to_create_a_ProjectConfig.cmake_file
-#install(FILES
-#  "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${PROJECT_NAME}Config.cmake"
-#  "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
-#  DESTINATION "${INSTALL_CMAKE_DIR}" COMPONENT dev)
-
 
 install(TARGETS ${PROJECT_NAME}
     ARCHIVE  DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -273,3 +256,9 @@ install(TARGETS ${PROJECT_NAME}
     RUNTIME  DESTINATION ${CMAKE_INSTALL_BINDIR})  # This is for Windows
 
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
+install(DIRECTORY Thirdparty/DBoW2/DBoW2 DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/DBoW2)
+install(DIRECTORY Thirdparty/DBoW2/DUtils DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/DBoW2)
+install(DIRECTORY Thirdparty/OpenGV/include/opengv DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(DIRECTORY Thirdparty/g2o/g2o DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(FILES Thirdparty/g2o/config.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(DIRECTORY Thirdparty/Eigen/Eigen DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/eigen3)
